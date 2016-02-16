@@ -1,64 +1,95 @@
 *It all started Feb 15 2016 from this official Docker 
 [post on twitter](https://twitter.com/docker/status/699276372204773376)*
 
-![logo](../master/img/docker-datacenter.jpg?raw=true)
+# frntn/docker-datacenter-helper
 
-# frntn/docker-datacenter
+This repo will help you start an *Up & Running* **Docker Datacenter** solution made 
+of the two following (commercial) products :
 
-*Quick & Dirty* repo to help you spin up a Docker environment with 
-the following 2 commercial products integrated :
+  * `UCP` : *Docker Universal Control Plane* offering on-prem management solution for Docker apps
+  * `DTR` : *Docker Trusted Registry* offering on-prem image management and storage
 
-  * `UCP` : Docker Universal Control Plane
-  * `DTR` : Docker Trusted Registry
+Both requires a **C**ommercial **S**upport (CS) subscription.
 
-Both requires a commercial support (CS) subscription.
 You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
-## TLDR
+## Usage
 
-```
-git clone https://github.com/frntn/docker-datacenter
-cd docker-datacenter
-vagrant up # take approx 30min on fresh install with a decent connection (1Mo/s)
+### Start your Docker Datacenter
+
+#### 1. spin up the `controller` and `registry` hosts. 
+
+They will respectively run UCP and DTR
+```bash
+vagrant up controller registry 
+# takes approx 30min on fresh install with a decent connection (1Mo/s)
 ```
 
 *Note: if you have multiple network interfaces the `vagrant up` will prompt for
 the good one. You can specify it in `Vagrantfile`->`config.vm.network` to
 prevent this.*
 
-## Some more details
+#### 2. configure controller/UCP
 
-```
-# List servers and display status
-vagrant status
-
-# Get UCP server ip address
-vagrant ssh ucp -c "ip addr show dev eth1"
-
-# Get DTR server ip address
-vagrant ssh dtr -c "ip addr show dev eth1"
+Get controller/UCP dashboard IP address
+```bash
+./getip.sh controller
+# results will be like 'X.X.X.X'
 ```
 
-On your host, open up your default browser and :
+From your host browser go to `https://X.X.X.X` (the certificate is not trusted so 
+you have to accept the *insecure* connection. That's the expected behavior).
 
-1. Go to UCP dashboard (https://ucp-vm-ip/), connect using the default auth 
-(admin/orca) and change password.
+Now connect using defaults `admin`/`orca` and in the settings page upload your license.
 
-![dashboard-ucp](../master/img/dashboard-ucp.png?raw=true)
+![controller-addlicense](img/controller-addlicense.png?raw=true)
 
-2. Go to DTR dashboard (https://dtr-vm-ip/) and setup your domain name, upload
-your license, add authentication
+It is also recommended that you change your password (upper-right corner : 
+`admin`->`profile`)
 
-![dashboard-dtr](../master/img/dashboard-dtr.png?raw=true)
+![controller-editprofile](img/controller-editprofile.png?raw=true)
 
-Additional setup information can be found
-[here for UCP](http://ucp-beta-docs.s3-website-us-west-1.amazonaws.com/) and 
-[here for DTR](https://docs.docker.com/docker-trusted-registry/configuration/) 
+#### 3. configure registry/DTR
 
-Eventually you may want to take a look at the official 
-[UCP lab](https://github.com/docker/ucp_lab) and play/extend with your setup...
+Get registry/DTR dashboard IP address
+```bash
+./getip.sh registry
+# results will be like 'Y.Y.Y.Y'
+```
 
-## Why ?
+From your host browser go to `https://Y.Y.Y.Y` (the certificate is not trusted so 
+you have to accept the *insecure* connection. That's the expected behavior).
+
+Now go to `Settings`->`general` to update the domain name to `registry.docker.local`
+(Don't forget to hit `save and restart` at the bottom of the page)
+
+![registry-editdomain](img/registry-editdomain.png?raw=true)
+
+Then go to `Settings`->`License` and upload your license.
+
+![registry-addlicense](img/registry-addlicense.png?raw=true)
+
+Finally it is also recommended to setup a minimal authentication in
+`Settings`->`Auth`
+
+![registry-adduser](img/registry-adduser.png?raw=true)
+
+#### 4. spin up 2 additional nodes and join the controller
+
+```bash
+# if you have NOT change the controller password
+./helper.sh
+
+# if you have change the controller password
+UCP_ADMIN_PASSWORD=mynewpass ./helper.sh 
+``` 
+
+### Use your Docker Datacenter
+
+The lab for UCP [available on github](https://github.com/docker/ucp_lab) gives
+some example on how to deploy your first applications
+
+## Why this helper
 
 It can be difficult to have a valid setup while following the documentation 
 which is still in very early stage and contains inconsistency or 
@@ -71,24 +102,10 @@ engine 1.10.
 *(Note: I'd be happy to help and contribute on that, but this is the 
 commercial product and it's not available on github)*
 
-## What ?
+## Miscellaneous
 
-### DTR
+  * Docker Trusted Registry [official product page](https://www.docker.com/products/docker-trusted-registry) :
+  * Docker Universal Control Plane [official product page](https://www.docker.com/products/docker-universal-control-plane) :
 
-From the [official product page](https://www.docker.com/products/docker-trusted-registry) :
-
-> Docker Trusted Registry allows you to store and manage 
-> your Docker images on-premise 
-> or in your virtual private cloud to support security 
-> or regulatory compliance requirements 
-> in keeping data and applications your infrastructure
-
-### UCP
-
-From the [official product page](https://www.docker.com/products/docker-universal-control-plane) :
-
-> Universal Control Plane offers an on-premises management 
-> solution for Docker apps, regardless of where they run.
-> It can be deployed to any private infrastructure 
-> or public cloud
+![official-logo](img/docker-datacenter.jpg?raw=true)
 
