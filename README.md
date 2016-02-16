@@ -43,11 +43,13 @@ On your host, open up your default browser and :
 
 1. Go to UCP dashboard (https://ucp-vm-ip/), connect using the default auth 
 (admin/orca) and change password.
+
 ![dashboard-ucp](../master/img/dashboard-ucp.png?raw=true)
 
 2. Go to DTR dashboard (https://dtr-vm-ip/) and setup your domain name, upload
 your license, add authentication
-![dashboard-ucp](../master/img/dashboard-ucp.png?raw=true)
+
+![dashboard-dtr](../master/img/dashboard-dtr.png?raw=true)
 
 Additional setup information can be found
 [here for UCP](http://ucp-beta-docs.s3-website-us-west-1.amazonaws.com/) and 
