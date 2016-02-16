@@ -1,7 +1,7 @@
 *It all started Feb 15 2016 from this official Docker 
 [post on twitter](https://twitter.com/docker/status/699276372204773376)*
 
-![logo](https://raw.githubusercontent.com/frntn/docker-datacenter/master/docker-datacenter.png)
+![logo](https://raw.githubusercontent.com/frntn/docker-datacenter/master/docker-datacenter.jpg)
 
 # frntn/docker-datacenter
 
