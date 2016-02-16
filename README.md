@@ -1,7 +1,7 @@
 *It all started Feb 15 2016 from this official Docker 
 [post on twitter](https://twitter.com/docker/status/699276372204773376)*
 
-![logo](https://raw.githubusercontent.com/frntn/docker-datacenter/master/docker-datacenter.jpg)
+![logo](../master/img/docker-datacenter.jpg?raw=true)
 
 # frntn/docker-datacenter
 
@@ -22,6 +22,10 @@ cd docker-datacenter
 vagrant up # take approx 30min on fresh install with a decent connection (1Mo/s)
 ```
 
+*Note: if you have multiple network interfaces the `vagrant up` will prompt for
+the good one. You can specify it in `Vagrantfile`->`config.vm.network` to
+prevent this.*
+
 ## Some more details
 
 ```
@@ -39,8 +43,11 @@ On your host, open up your default browser and :
 
 1. Go to UCP dashboard (https://ucp-vm-ip/), connect using the default auth 
 (admin/orca) and change password.
+![dashboard-ucp](../master/img/dashboard-ucp.png?raw=true)
+
 2. Go to DTR dashboard (https://dtr-vm-ip/) and setup your domain name, upload
 your license, add authentication
+![dashboard-ucp](../master/img/dashboard-ucp.png?raw=true)
 
 Additional setup information can be found
 [here for UCP](http://ucp-beta-docs.s3-website-us-west-1.amazonaws.com/) and 
