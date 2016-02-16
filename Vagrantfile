@@ -13,7 +13,7 @@ DTR
 
 Vagrant.configure(2) do |config|
   config.vm.box = "boxcutter/ubuntu1404"
-  config.vm.network "public_network", bridge: "wlan0"
+  config.vm.network "public_network"#, bridge: "wlan0"
   config.vm.provision "docker", images: ["docker/ucp"]
 
   # Docker suggests a minimum of 1.50 GB for UCP host

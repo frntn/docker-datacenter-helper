@@ -20,14 +20,14 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 #### 1. spin up the `controller` and `registry` hosts. 
 
 They will respectively run UCP and DTR
+
+*Note: if you have multiple network interfaces the `vagrant up` will prompt for
+the good one. To get an unattended behavior you can specify it in 
+`Vagrantfile`->`config.vm.network`*
 ```bash
 vagrant up controller registry 
 # takes approx 30min on fresh install with a decent connection (1Mo/s)
 ```
-
-*Note: if you have multiple network interfaces the `vagrant up` will prompt for
-the good one. You can specify it in `Vagrantfile`->`config.vm.network` to
-prevent this.*
 
 #### 2. configure controller/UCP
 
