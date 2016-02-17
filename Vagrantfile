@@ -25,22 +25,22 @@ Vagrant.configure(2) do |config|
 
   # DTR provisioning
   config.vm.define :registry do |dtr|
-    dtr.vm.hostname = "registry.docker.local"
     dtr.vm.provision "docker", images: ["docker/trusted-registry"]
     dtr.vm.provision "shell" , inline: $DTR_INSTALL
+    dtr.vm.hostname = "registry.docker.local"
   end
 
-  # UCP provisioning
-  config.vm.define :controller do |ucp|
-    ucp.vm.provision "shell" , inline: $UCP_INSTALL
-  end
-
-  # Additional nodes managed by UCP (join)
+  # UCP nodes and controller provisioning
   ucp_nodes.each do |ucp_node|
     config.vm.define ucp_node do |node|
       node.vm.provision "docker", images: ["docker/ucp"]
       node.vm.hostname = "#{ucp_node}.docker.local"
     end
+  end
+
+  # UCP controller-specific provisioning
+  config.vm.define :controller do |ucp|
+    ucp.vm.provision "shell" , inline: $UCP_INSTALL
   end
 
 end
