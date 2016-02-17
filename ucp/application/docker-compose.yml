@@ -1,0 +1,27 @@
+voting-app:
+  image: dockercond2/dockercon-voting-app
+  links:
+    - redis:voteapps_redis_1
+  ports:
+     - "5000:80"
+
+redis:
+  image: redis
+  ports: ["6379"]
+
+worker:
+  image: dockercond2/dockercon-worker
+  links:
+    - redis:voteapps_redis_1
+    - db:voteapps_db_1
+
+db:
+  image: postgres:9.4
+
+result-app:
+  image: dockercond2/dockercon-result-app
+  links:
+    - db:voteapps_db_1
+  ports:
+     - "5001:80"
+
