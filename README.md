@@ -57,9 +57,14 @@ And finally create :
 1. An `organisation` and
 2. A `repository` inside that organisation
 
+Now you might still have red box warning about docker engine incompatibility.
+That's not a problem: Just a version checking bug on `1.4.2` which is the latest
+at the time of writing.
+
 #### A3. demo helper
 
-Start the `dtr_helper.sh` script to see in action a demo of a customized jenkins (build, push, run)
+Start the `dtr_helper.sh` script to see in action a demo of a customized jenkins
+(build, push, run)
 ```bash
 vagrant ssh registry -c /vagrant/dtr_helper.sh
 # takes approx 10min
