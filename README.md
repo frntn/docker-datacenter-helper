@@ -54,6 +54,7 @@ You will also **need** to setup a minimal authentication in `Settings`->`Auth`
 ![registry-adduser](img/registry-adduser.png?raw=true)
 
 And finally create :
+
 1. An `organisation` and
 2. A `repository` inside that organisation
 
@@ -71,6 +72,7 @@ vagrant ssh registry -c /vagrant/dtr_helper.sh
 ```
 
 This will :
+
 1. build a custom jenkins from official image
 2. push the custom image on the DTR
 3. run a container pulled from that remote image stored on the DTR
