@@ -108,7 +108,9 @@ It is also recommended that you change your password (upper-right corner :
 
 ![controller-editprofile](img/controller-editprofile.png?raw=true)
 
-#### B3. spin up 2 additional nodes and join the controller
+#### B3. join helper
+
+spin up 2 additional nodes and join the controller
 
 ```bash
 # if you have NOT change the controller password
@@ -118,10 +120,10 @@ It is also recommended that you change your password (upper-right corner :
 UCP_ADMIN_PASSWORD=mynewpass ./ucp_helper.sh 
 ``` 
 
-### Use your Docker Datacenter
+#### B4. use your UCP service
 
-The lab for UCP [available on github](https://github.com/docker/ucp_lab) gives
-some example on how to deploy your first applications
+The [lab for UCP](https://github.com/docker/ucp_lab) gives some good examples on how
+to deploy your first applications
 
 ## Why this helper
 
