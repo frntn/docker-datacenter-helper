@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -u
 
 case "$1" in
   'controller'|'registry') node=$1;;
