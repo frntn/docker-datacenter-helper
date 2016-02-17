@@ -16,7 +16,7 @@ curl -sSLk -H "Authorization: Bearer $AUTHTOKEN" https://192.168.31.33/api/clien
 
 # extract client bundle
 cd bundle
-unzip bundle.zip
+unzip -o bundle.zip
 rm bundle.zip
 cd ..
 
