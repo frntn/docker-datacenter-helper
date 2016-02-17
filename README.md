@@ -3,8 +3,8 @@
 
 # frntn/docker-datacenter-helper
 
-This repo will help you start an *Up & Running* **Docker Datacenter** solution made 
-of the two following (commercial) products :
+This repo will help you start an *Up & Running* Docker's Datacenter solutions made 
+with the two following (commercial) products :
 
   * `DTR` : *Docker Trusted Registry* offering on-prem image management and storage
   * `UCP` : *Docker Universal Control Plane* offering on-prem management solution for Docker apps
@@ -138,8 +138,8 @@ commercial product and it's not available on github)*
 
 ## Miscellaneous
 
-  * Docker Trusted Registry [official product page](https://www.docker.com/products/docker-trusted-registry) :
-  * Docker Universal Control Plane [official product page](https://www.docker.com/products/docker-universal-control-plane) :
+  * Docker Trusted Registry [official product page](https://www.docker.com/products/docker-trusted-registry) and [solution brief](https://www.docker.com/sites/default/files/Solutions_Brief_Docker%20Trusted%20Registry_V2%20%281%29.pdf)
+  * Docker Universal Control Plane [official product page](https://www.docker.com/products/docker-universal-control-plane) and [solution brief](https://www.docker.com/sites/default/files/Solutions_UCP_V3.pdf)
 
 ![official-logo](img/docker-datacenter.jpg?raw=true)
 
