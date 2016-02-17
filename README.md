@@ -64,10 +64,10 @@ at the time of writing.
 
 #### A3. demo helper
 
-Start the `dtr_helper.sh` script to see in action a demo of a customized jenkins
+Start the `dtr/helper.sh` script to see in action a demo of a customized jenkins
 (build, push, run)
 ```bash
-vagrant ssh registry -c /vagrant/dtr_helper.sh
+vagrant ssh registry -c /vagrant/dtr/helper.sh
 # takes approx 10min
 ```
 
@@ -114,16 +114,35 @@ spin up 2 additional nodes and join the controller
 
 ```bash
 # if you have NOT change the controller password
-./ucp_helper.sh
+./ucp/helper.sh
 
 # if you have change the controller password
-UCP_ADMIN_PASSWORD=mynewpass ./ucp_helper.sh 
+UCP_ADMIN_PASSWORD=mynewpass ./ucp/helper.sh 
 ``` 
 
 #### B4. use your UCP service
 
-The [lab for UCP](https://github.com/docker/ucp_lab) gives some good examples on how
-to deploy your first applications
+From your admin workstation (typically your host in this context), we want to 
+be able to user the docker client against the UCP controller and nodes.
+
+```bash
+cd ucp/bundle/
+source env.sh
+
+docker version # <-- server version is now 'ucp/x.x.x'
+```
+
+Now we can start **UCP applications** using the sample app :
+
+```bash
+cd ucp/application
+docker-compose -d up
+```
+
+You're done. Now back to the UCP dashboard you can see the newly deployed
+application :
+
+![registry-adduser](img/ucp-dashboard.png?raw=true)
 
 ## Why this helper
 
