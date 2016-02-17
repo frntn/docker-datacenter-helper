@@ -62,18 +62,26 @@ And finally create :
 Start the `dtr_helper.sh` script to see in action a demo of a customized jenkins (build, push, run)
 ```bash
 vagrant ssh registry -c /vagrant/dtr_helper.sh
+# takes approx 10min
 ```
+
+This will :
+1. build a custom jenkins from official image
+2. push the custom image on the DTR
+3. run a container pulled from that remote image stored on the DTR
+
+You're done. You can safely open your browser to http://Y.Y.Y.Y:8080 :)
 
 ### B. Start your Controller (UCP)
 
-#### A1. spin up the `controller` host. 
+#### B1. spin up the `controller` host. 
 
 ```bash
 vagrant up controller 
 # takes approx 10min on fresh install with a decent connection (1Mo/s)
 ```
 
-#### A2. configure UCP service
+#### B2. configure UCP service
 
 Get controller/UCP dashboard IP address
 ```bash
@@ -93,7 +101,7 @@ It is also recommended that you change your password (upper-right corner :
 
 ![controller-editprofile](img/controller-editprofile.png?raw=true)
 
-#### A3. spin up 2 additional nodes and join the controller
+#### B3. spin up 2 additional nodes and join the controller
 
 ```bash
 # if you have NOT change the controller password
