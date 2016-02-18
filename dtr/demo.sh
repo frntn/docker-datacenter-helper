@@ -3,7 +3,7 @@
 : ${DTR_URL:="registry.docker.local"}
 : ${DTR_EMAIL:="ci@docker.local"}
 : ${DTR_USER:="frntn"}
-: ${DTR_PASS:="overridepass"}
+: ${DTR_PASS:="demopass"}
 : ${DTR_ORG:="ci-infra"}
 : ${DTR_REPO:="myjenkins"}
 

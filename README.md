@@ -69,10 +69,14 @@ you have to accept the *insecure* connection. That's the expected behavior).
 ![registry-addlicense](img/registry-addlicense.png?raw=true)
 
 **Create** an admin user in `Settings`->`Auth`
+(if you want to use the demo script below, you'll need to create the following 
+username/password : `frntn`/`demopass`)
 
 ![registry-adduser](img/registry-adduser.png?raw=true)
 
 And finally **create** an `organisation` and a `repository` inside that organisation.
+(if you want to use the demo script below, you'll need to create the following 
+orgnisation/repository : `ci-infra`/`myjenkins`)
 
 *Now you might still have red box warning about docker engine incompatibility.
 That's not a problem: Just a version checking bug on `1.4.2` which is the latest
