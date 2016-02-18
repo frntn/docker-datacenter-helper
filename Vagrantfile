@@ -15,7 +15,7 @@ ucp_nodes = ["controller", "node1", "node2"]
 
 Vagrant.configure(2) do |config|
   config.vm.box = "boxcutter/ubuntu1404"
-  config.vm.network "public_network", bridge: "eth0"
+  config.vm.network "public_network", bridge: "wlan0"
 
   # Docker suggests a minimum of 1.50 GB for UCP host
   # 1GB for all will be enough for testing purpose

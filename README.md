@@ -1,30 +1,27 @@
-*It all started Feb 15 2016 from this official Docker 
-[post on twitter](https://twitter.com/docker/status/699276372204773376)*
+
+**Get Docker's official datacenter solutions _up & running_ in no time !**
 
 # frntn/docker-datacenter-helper
 
-This repo will help you start an *Up & Running* Docker's Datacenter solutions made 
-with the two following (commercial) products :
+  * `DTR` or `Docker Trusted Registry`: offers on-premise image management and storage
+  * `UCP` or `Universal Control Plane`: offers on-premise docker applications management
 
-  * `DTR` : *Docker Trusted Registry* offering on-prem image management and storage
-  * `UCP` : *Docker Universal Control Plane* offering on-prem management solution for Docker apps
-
-Both requires a **C**ommercial **S**upport (CS) subscription.
+Both requires a CS subscription (*__C__ommercial __S__upport*).
 
 You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 ## Table of Contents
 
-- [Usage](#usage)
-- .. [A. Docker Trusted Registry](#a-docker-trusted-registry)
-- .... [A1. start your DTR](#a1-start-your-dtr)
-- .... [A2. configure the service](#a2-configure-the-service)
-- .... [A3. launch demo](#a3-launch-demo)
-- .. [B. Universal Control Plane](#b-universal-control-plane)
-- .... [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
-- .... [B2. configure the service](#b2-configure-the-service)
-- .... [B3. launch demo](#b3-launch-demo)
-- [Miscellaneous](#miscellaneous)
+- .. [Usage](#usage)
+- .... [A. Docker Trusted Registry](#a-docker-trusted-registry)
+- ...... [A1. start your DTR](#a1-start-your-dtr)
+- ...... [A2. configure the service](#a2-configure-the-service)
+- ...... [A3. launch demo](#a3-launch-demo)
+- .... [B. Universal Control Plane](#b-universal-control-plane)
+- ...... [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
+- ...... [B2. configure the service](#b2-configure-the-service)
+- ...... [B3. launch demo](#b3-launch-demo)
+- .. [Miscellaneous](#miscellaneous)
 
 ## Usage
 
