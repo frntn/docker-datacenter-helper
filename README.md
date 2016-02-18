@@ -16,14 +16,14 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 ## Table of Contents
 
 - [Usage](#usage)
-- ` `[A. Docker Trusted Registry](#a-docker-trusted-registry)
-- `  `[A1. start your DTR](#a1-start-your-dtr)
-- `  `[A2. configure the service](#a2-configure-the-service)
-- `  `[A3. launch demo](#a3-launch-demo)
-- ` `[B. Universal Control Plane](#b-universal-control-plane)
-- `  `[B1. start your UCP cluster](#b1-start-your-ucp-cluster)
-- `  `[B2. configure the service](#b2-configure-the-service)
-- `  `[B3. launch demo](#b3-launch-demo)
+- ..[A. Docker Trusted Registry](#a-docker-trusted-registry)
+- ....[A1. start your DTR](#a1-start-your-dtr)
+- ....[A2. configure the service](#a2-configure-the-service)
+- ....[A3. launch demo](#a3-launch-demo)
+- ..[B. Universal Control Plane](#b-universal-control-plane)
+- ....[B1. start your UCP cluster](#b1-start-your-ucp-cluster)
+- ....[B2. configure the service](#b2-configure-the-service)
+- ....[B3. launch demo](#b3-launch-demo)
 - [Miscellaneous](#miscellaneous)
 
 ## Usage
