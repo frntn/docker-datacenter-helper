@@ -7,7 +7,7 @@ install:
   - sudo apt-get update -q
   - sudo apt-get install -y -q curl virtualbox-5.0 --fix-missing
   - sudo /etc/init.d/vboxdrv status
-  - sudo /sbin/rcvboxdrv setup
+  - sudo /etc/init.d/vboxdrv start
   - sudo /etc/init.d/vboxdrv status
   - sudo wget -O vagrant.deb -nv https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
   - sudo dpkg -i vagrant.deb
