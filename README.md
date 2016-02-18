@@ -6,7 +6,7 @@
   * `DTR` or `Docker Trusted Registry`: offers on-premise image management and storage
   * `UCP` or `Universal Control Plane`: offers on-premise docker applications management
 
-Both requires a CS subscription *(__C__ommercial __S__upport)*
+Both requires a CS subscription _(**C**ommercial **S**upport)_
 
 You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
