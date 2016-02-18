@@ -1,3 +1,4 @@
 .vagrant/
 ucp/bundle/*
 !ucp/bundle/.keep
+out.log
