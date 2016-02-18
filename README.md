@@ -33,7 +33,7 @@ vagrant up registry
 
 Get registry host IP address
 ```bash
-./getip.sh registry
+./dashboard.sh registry
 # results will be like 'Y.Y.Y.Y'
 ```
 
@@ -80,7 +80,7 @@ This will :
 
 You're done. You can safely open your browser to http://Y.Y.Y.Y:8080 :)
 
-### B. Universal Controle Plane
+### B. Universal Control Plane
 
 #### B1. start your UCP cluster
 
@@ -119,8 +119,7 @@ Change the default passowrd in the profile page
 
 #### B3. launch your first application
 
-From your admin workstation (typically your host in this context), we want to 
-be able to user the docker client against the UCP controller and nodes.
+We now want to use the docker client against the UCP cluster :
 
 ```bash
 cd ucp/bundle/
@@ -128,7 +127,7 @@ source env.sh  # <-- your docker client now speaks with your "remote" UCP cluste
 docker version # <-- the 'server:' now mentions 'ucp/0.8.0'
 ```
 
-Then spinup the demo application against the UCP cluster
+We can now spinup the demo application :
 
 ```bash
 cd ucp/application
