@@ -15,9 +15,10 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 ## Usage
 
-*Note: if you have multiple network interfaces the `vagrant up` will prompt for
-the good one. To get an unattended behavior you can specify it in 
-`Vagrantfile`->`config.vm.network`*
+*Note:  
+if you want **unattended install** you must specify your network interface in 
+`Vagrantfile`->`config.vm.network`. On linux, you can extract this information
+using this command : `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
 
 ### A. Start your Registery (DTR)
 
@@ -79,83 +80,65 @@ This will :
 
 You're done. You can safely open your browser to http://Y.Y.Y.Y:8080 :)
 
-### B. Start your Controller (UCP)
+### B. Universal Controle Plance
 
-#### B1. spin up the `controller` host. 
+#### B1. start your UCP cluster
 
 ```bash
-vagrant up controller 
-# takes approx 10min on fresh install with a decent connection (1Mo/s)
+./start.sh ucp
 ```
 
-#### B2. configure UCP service
+This will :
 
-Get controller/UCP dashboard IP address
+1. Destroy previously created UCP vms (if any)
+2. Spin up the master `controller` vm
+3. Spin up the replicas `node1` and `node2` vm
+4. Configure multi-host networking
+
+Now you just have to setup your UCP instance and you're ready to go
+
+#### B2. configure the service
+
+Get UCP dashboard url
 ```bash
-./getip.sh controller
-# results will be like 'X.X.X.X'
+./dashboard.sh ucp
 ```
 
-From your host browser go to `https://X.X.X.X` (the certificate is not trusted so 
+Open your browser to the given url (the certificate is not trusted so 
 you have to accept the *insecure* connection. That's the expected behavior).
 
-Now connect using defaults `admin`/`orca` and in the settings page upload your license.
+Connect using defaults `admin`/`orca` 
+
+Upload your license in the settings page
 
 ![controller-addlicense](img/controller-addlicense.png?raw=true)
 
-It is also recommended that you change your password (upper-right corner : 
-`admin`->`profile`)
+Change the default passowrd in the profile page 
 
 ![controller-editprofile](img/controller-editprofile.png?raw=true)
 
-#### B3. join helper
-
-spin up 2 additional nodes and join the controller
-
-```bash
-# if you have NOT change the controller password
-./ucp/helper.sh
-
-# if you have change the controller password
-UCP_ADMIN_PASSWORD=mynewpass ./ucp/helper.sh 
-``` 
-
-#### B4. use your UCP service
+#### B3. launch your first application
 
 From your admin workstation (typically your host in this context), we want to 
 be able to user the docker client against the UCP controller and nodes.
 
 ```bash
 cd ucp/bundle/
-source env.sh
-
-docker version # <-- server version is now 'ucp/x.x.x'
+source env.sh  # <-- your docker client now speaks with your "remote" UCP cluster
+docker version # <-- the 'server:' now mentions 'ucp/0.8.0'
 ```
 
-Now we can start **UCP applications** using the sample app :
+Then spinup the demo application against the UCP cluster
 
 ```bash
 cd ucp/application
 docker-compose up -d
 ```
 
-You're done. Now back to the UCP dashboard you can see the newly deployed
-application :
+Congratulations ! :)
+Back to the UCP dashboard you can see the newly deployed application :
 
 ![registry-adduser](img/ucp-dashboard.png?raw=true)
-
-## Why this helper
-
-It can be difficult to have a valid setup while following the documentation 
-which is still in very early stage and contains inconsistency or 
-incompatibility between UCP and DTR. 
-
-One example is the UCP documentation explains how to install CS engine 1.9 
-and then pulls UCP latest which turns out to be 0.8 and only valid for CS 
-engine 1.10.
-
-*(Note: I'd be happy to help and contribute on that, but this is the 
-commercial product and it's not available on github)*
 
 ## Miscellaneous
 
