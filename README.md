@@ -136,7 +136,7 @@ Now we can start **UCP applications** using the sample app :
 
 ```bash
 cd ucp/application
-docker-compose -d up
+docker-compose up -d
 ```
 
 You're done. Now back to the UCP dashboard you can see the newly deployed
