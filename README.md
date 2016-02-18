@@ -12,21 +12,16 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 ## Table of Contents
 
-- .. [Usage](#usage)
-
-- .... [A. Docker Trusted Registry](#a-docker-trusted-registry)
-
-- ...... [A1. start your DTR](#a1-start-your-dtr)
-- ...... [A2. configure the service](#a2-configure-the-service)
-- ...... [A3. launch demo](#a3-launch-demo)
-
-- .... [B. Universal Control Plane](#b-universal-control-plane)
-
-- ...... [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
-- ...... [B2. configure the service](#b2-configure-the-service)
-- ...... [B3. launch demo](#b3-launch-demo)
-
-- .. [Miscellaneous](#miscellaneous)
+- [Usage](#usage)
+  - [A. Docker Trusted Registry](#a-docker-trusted-registry)
+    - [A1. start your DTR](#a1-start-your-dtr)
+    - [A2. configure the service](#a2-configure-the-service)
+    - [A3. launch demo](#a3-launch-demo)
+  - [B. Universal Control Plane](#b-universal-control-plane)
+    - [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
+    - [B2. configure the service](#b2-configure-the-service)
+    - [B3. launch demo](#b3-launch-demo)
+- [Miscellaneous](#miscellaneous)
 
 ## Usage
 
@@ -89,7 +84,7 @@ at the time of writing.*
 **Start** the demo script to see the DTR in action
 
 ```bash
-vagrant ssh registry -c /vagrant/dtr/demo.sh
+./start.sh dtr_demo
 ```
 
 This will :

@@ -9,6 +9,12 @@ function start_dtr {
   set +x
 }
 
+function start_dtr_demo {
+  set -x
+  echo vagrant ssh registry -c /vagrant/dtr/demo.sh > logs/dtr_demo_${logdate}.log
+  set +x
+}
+
 function start_ucp {
   set -x
   time vagrant destroy controller node1 node2 -f >  logs/ucp_${logdate}.log
@@ -29,7 +35,7 @@ function start_ucp {
 logdate="$(date +%Y%m%d_%H%M)"
 
 case "${1,,}" in
-  'ucp'|'dtr') main="start_${1,,}";;
+  'ucp'|'dtr'|'dtr_demo') main="start_${1,,}";;
 esac
 
 $main
