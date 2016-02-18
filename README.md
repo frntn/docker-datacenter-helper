@@ -13,6 +13,19 @@ Both requires a **C**ommercial **S**upport (CS) subscription.
 
 You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
+## Table of Contents
+
+- [Usage](#usage)
+-  [A. Docker Trusted Registry](#a-docker-trusted-registry)
+-   [A1. start your DTR](#a1-start-your-dtr)
+-   [A2. configure the service](#a2-configure-the-service)
+-   [A3. launch demo](#a3-launch-demo)
+-  [B. Universal Control Plane](#b-universal-control-plane)
+-   [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
+-   [B2. configure the service](#b2-configure-the-service)
+-   [B3. launch demo](#b3-launch-demo)
+- [Miscellaneous](#miscellaneous)
+
 ## Usage
 
 *Note:  
@@ -20,65 +33,68 @@ if you want **unattended install** you must specify your network interface in
 `Vagrantfile`->`config.vm.network`. On linux, you can extract this information
 using this command : `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
 
-### A. Start your Registery (DTR)
+### A. Docker Trusted Registry
 
-#### A1. spin up the `registry` host. 
+#### A1. start your DTR
 
 ```bash
-vagrant up registry 
-# takes approx 20min on fresh install with a decent connection (1Mo/s)
-```
-
-#### A2. configure DTR service
-
-Get registry host IP address
-```bash
-./dashboard.sh registry
-# results will be like 'Y.Y.Y.Y'
-```
-
-From your host browser go to `https://Y.Y.Y.Y` (the certificate is not trusted
-so you have to accept the *insecure* connection. That's the expected behavior).
-
-Now go to `Settings`->`general` to update the domain name to
-`registry.docker.local` (Don't forget to hit `save and restart` at the bottom 
-of the page)
-
-![registry-editdomain](img/registry-editdomain.png?raw=true)
-
-Then go to `Settings`->`License` and upload your license.
-
-![registry-addlicense](img/registry-addlicense.png?raw=true)
-
-You will also **need** to setup a minimal authentication in `Settings`->`Auth`
-
-![registry-adduser](img/registry-adduser.png?raw=true)
-
-And finally create :
-
-1. An `organisation` and
-2. A `repository` inside that organisation
-
-Now you might still have red box warning about docker engine incompatibility.
-That's not a problem: Just a version checking bug on `1.4.2` which is the latest
-at the time of writing.
-
-#### A3. demo helper
-
-Start the `dtr/helper.sh` script to see in action a demo of a customized jenkins
-(build, push, run)
-```bash
-vagrant ssh registry -c /vagrant/dtr/helper.sh
-# takes approx 10min
+./start.sh dtr
 ```
 
 This will :
 
-1. build a custom jenkins from official image
-2. push the custom image on the DTR
-3. run a container pulled from that remote image stored on the DTR
+1. Destroy previously created DTR vm (if any)
+2. Spin up the `registry` vm
+4. Start the demo script from within the vm
 
-You're done. You can safely open your browser to http://Y.Y.Y.Y:8080 :)
+Now you just have to setup your UCP instance and you're ready to go
+
+#### A2. configure the service
+
+**Get** DTR dashboard url
+
+```bash
+./dashboard.sh dtr
+```
+
+**Open** your browser to the given url (the certificate is not trusted so 
+you have to accept the *insecure* connection. That's the expected behavior).
+
+**Set** the domain name to `registry.docker.local` in `Settings`->`general` 
+(Don't forget to hit `save and restart` at the bottom of the page)
+
+![registry-editdomain](img/registry-editdomain.png?raw=true)
+
+**Upload** your license in `Settings`->`License`
+
+![registry-addlicense](img/registry-addlicense.png?raw=true)
+
+**Create** an admin user in `Settings`->`Auth`
+
+![registry-adduser](img/registry-adduser.png?raw=true)
+
+And finally **create** an `organisation` and a `repository` inside that organisation.
+
+*Now you might still have red box warning about docker engine incompatibility.
+That's not a problem: Just a version checking bug on `1.4.2` which is the latest
+at the time of writing.*
+
+#### A3. launch demo
+
+**Start** the demo script to see the DTR in action
+
+```bash
+vagrant ssh registry -c /vagrant/dtr/demo.sh
+```
+
+This will :
+
+1. *build* a custom jenkins from official image
+2. *push* the custom image on the DTR
+3. *run* a container pulled from that remote image stored on the DTR
+
+Congratulations ! :)
+You can now open the dashboard of your custom Jenkins instance.
 
 ### B. Universal Control Plane
 
@@ -99,25 +115,26 @@ Now you just have to setup your UCP instance and you're ready to go
 
 #### B2. configure the service
 
-Get UCP dashboard url
+**Get** UCP dashboard url
+
 ```bash
 ./dashboard.sh ucp
 ```
 
-Open your browser to the given url (the certificate is not trusted so 
+**Open** your browser to the given url (the certificate is not trusted so 
 you have to accept the *insecure* connection. That's the expected behavior).
 
-Connect using defaults `admin`/`orca` 
+**Connect** using defaults `admin`/`orca` 
 
-Upload your license in the settings page
+**Upload** your license in the settings page
 
 ![controller-addlicense](img/controller-addlicense.png?raw=true)
 
-Change the default passowrd in the profile page 
+**Change** the default passowrd in the profile page 
 
 ![controller-editprofile](img/controller-editprofile.png?raw=true)
 
-#### B3. launch your first application
+#### B3. launch demo
 
 We now want to use the docker client against the UCP cluster :
 

@@ -61,6 +61,11 @@ docker pull "$DTR_URL/$DTR_ORG/$DTR_REPO"
 # (note: this setup is for demo purpose. IRL you should enable https and use volume for data to persist...)
 docker run -p 8080:8080 -p 50000:50000 -d --name jenkins01 "$DTR_URL/$DTR_ORG/$DTR_REPO"
 
+jen=$(ip addr show dev eth1 | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
+echo 
+echo "Jenkins dashboard => http://$jen:8080"
+echo 
+
 : <<HELP
 
 If you get something like
