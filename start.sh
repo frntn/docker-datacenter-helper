@@ -11,7 +11,7 @@ function start_dtr {
 
 function start_dtr_demo {
   set -x
-  echo vagrant ssh registry -c /vagrant/dtr/demo.sh > logs/dtr_demo_${logdate}.log
+  vagrant ssh registry -c /vagrant/dtr/demo.sh > logs/dtr_demo_${logdate}.log
   set +x
 }
 
