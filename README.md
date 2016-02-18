@@ -80,7 +80,7 @@ This will :
 
 You're done. You can safely open your browser to http://Y.Y.Y.Y:8080 :)
 
-### B. Universal Controle Plance
+### B. Universal Controle Plane
 
 #### B1. start your UCP cluster
 
