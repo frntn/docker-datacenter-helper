@@ -26,7 +26,7 @@ mkdir -p jenkins-build && cd jenkins-build/
 #wget -qO- https://raw.githubusercontent.com/frntn/x509-san/master/gencert.sh | CRT_FILENAME="https" CRT_CN="docker.local" CRT_SAN="DNS:jenkins.docker.local" bash
 
 # from https://docs.docker.com/docker-trusted-registry/quick-start/
-echo "role-strategy:2.2.0" > plugins
+echo $'junit:1.9\nwindows-slaves:1.1\njunit-attachments:1.3\nmultiple-scms:0.5\nmashup-portlets-plugin:1.0.6\ncvs:2.12\nscm-api:1.0\nldap:1.11\nbuild-pipeline-plugin:1.4.9\nmatrix-auth:1.2\njquery:1.11.2-0\nactive-directory:1.41\nsonargraph-plugin:1.6.4\ntranslation:1.12\nbuild-monitor-plugin:1.7+build.172\nparameterized-trigger:2.29\nexternal-monitor-job:1.4\nsimple-theme-plugin:0.3\nsubversion:2.5.4\njenkins-flowdock-plugin:1.1.8\ngroovy:1.27\nxunit:1.98\npam-auth:1.2\nssh-credentials:1.11\nsonar:2.3\nansicolor:0.4.2\ncredentials:1.24\ndashboard-view:2.9.6\nssh-slaves:1.10\nParameterized-Remote-Trigger:2.2.2\ngravatar:2.1\ngroovy-postbuild:2.2.2\ncobertura:1.9.7\njavadoc:1.3\nperformance:1.13\ngit-parameter:0.4.0\nshared-workspace:1.0.1\nproject-description-setter:1.1\njquery-ui:1.0.2\nmaven-plugin:2.12.1\nant:1.2\nmailer:1.16\ngreenballs:1.15\npromoted-builds:2.24\ngit:2.4.0\nantisamy-markup-formatter:1.3\nwebsocket:1.0.6\nmapdb-api:1.0.6.0\nmatrix-project:1.6\ntoken-macro:1.11\nscript-security:1.15\ngit-client:1.19.0' > plugins
 
 cat <<EOF >Dockerfile
 FROM jenkins:1.625.3
