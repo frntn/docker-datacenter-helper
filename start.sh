@@ -24,7 +24,7 @@ function start_ucp {
 
   # wait for all docker engines to restart and sync with 
   # their new multi-host networking setup (can take some time...)
-  sleep 90
+  sleep 240
 
   cd ucp/bundle/
   source env.sh
