@@ -59,7 +59,10 @@ docker pull "$DTR_URL/$DTR_ORG/$DTR_REPO"
 
 # start the container
 # (note: this setup is for demo purpose. IRL you should enable https and use volume for data to persist...)
-docker run -p 8080:8080 -p 50000:50000 -d --name jenkins01 "$DTR_URL/$DTR_ORG/$DTR_REPO"
+sudo mkdir -p /var/lib/jenkins
+sudo chown $USER:${GROUPS[0]} /var/lib/jenkins
+docker rm $(docker kill jenkins01)
+docker run -p 8080:8080 -p 50000:50000 -v /var/lib/jenkins:/var/jenkins_home  -d --name jenkins01 "$DTR_URL/$DTR_ORG/$DTR_REPO"
 
 jen=$(ip addr show dev eth1 | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
 echo 
