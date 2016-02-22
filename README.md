@@ -34,7 +34,7 @@ using this command : `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
 #### A1. start your DTR
 
 ```bash
-./start.sh dtr
+./start.sh dtr   # <-- approx 25min (with a decent 1Mo/s internet connection)
 ```
 
 This will :
@@ -84,7 +84,7 @@ at the time of writing.*
 **Start** the demo script to see the DTR in action
 
 ```bash
-./start.sh dtr_demo
+./start.sh dtr_demo   # <-- approx 15min (with a decent 1Mo/s internet connection)
 ```
 
 This will :
