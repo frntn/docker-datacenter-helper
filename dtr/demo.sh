@@ -65,9 +65,11 @@ docker rm $(docker kill jenkins01)
 docker run -p 8080:8080 -p 50000:50000 -v /var/lib/jenkins:/var/jenkins_home  -d --name jenkins01 "$DTR_URL/$DTR_ORG/$DTR_REPO"
 
 jen=$(ip addr show dev eth1 | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
+{
 echo 
 echo "Jenkins dashboard => http://$jen:8080"
 echo 
+} >&2
 
 : <<HELP
 
