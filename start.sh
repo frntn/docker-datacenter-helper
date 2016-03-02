@@ -5,6 +5,7 @@
 cd "$(dirname "$0")"
 
 function start_dtr {
+  echo; echo " ==> Log file is 'log/dtr_${logdate}.log'"; echo
   set -x
   time vagrant destroy registry -f >  logs/dtr_${logdate}.log
   time vagrant up registry         >> logs/dtr_${logdate}.log
@@ -12,12 +13,14 @@ function start_dtr {
 }
 
 function start_dtr_demo {
+  echo; echo " ==> Log file is 'log/dtr_demo_${logdate}.log'"; echo
   set -x
   vagrant ssh registry -c /vagrant/dtr/demo.sh > logs/dtr_demo_${logdate}.log
   set +x
 }
 
 function start_ucp {
+  echo; echo " ==> Log file is 'log/ucp_${logdate}.log'"; echo
   set -x
   time vagrant destroy controller node1 node2 -f >  logs/ucp_${logdate}.log
   time vagrant up controller                     >> logs/ucp_${logdate}.log
