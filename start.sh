@@ -1,5 +1,7 @@
 #!/bin/bash -u
 
+{
+
 cd "$(dirname "$0")"
 
 function start_dtr {
@@ -39,3 +41,5 @@ case "${1,,}" in
 esac
 
 $main
+
+}
