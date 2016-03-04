@@ -25,9 +25,12 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 ## Usage
 
-*Note: if you want __unattended install__ you must specify your network interface in 
+*Note1: if you want __unattended install__ you must specify your network interface in 
 `Vagrantfile`->`config.vm.network`. On linux, you can extract this information
 using this command : `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
+
+*Note2: I strongly recommend the usage of __vagrant cachier__ plugin 
+[more info](vagrant plugin install vagrant-cachier)*
 
 ### A. Docker Trusted Registry
 

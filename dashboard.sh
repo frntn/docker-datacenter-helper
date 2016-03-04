@@ -1,16 +1,23 @@
-#!/bin/bash -u
+#!/bin/bash
+
+set -u
 
 case "${1,,}" in
-  'ucp') node=controller;;
-  'dtr') node=registry;;
+  'ucp') nodes="controllerA controllerB";;
+  'dtr') nodes="registry";;
 esac
 
-ip=$(vagrant ssh $node -c      \
-  'ip addr show dev eth1' \
-  | grep -E '\<inet\>'    \
-  | awk '{print $2}'      \
-  | cut -d'/' -f1)
+for node in $nodes
+do
+  ip=$(vagrant ssh $node -c      \
+    'ip addr show dev eth1' \
+    | grep -E '\<inet\>'    \
+    | awk '{print $2}'      \
+    | cut -d'/' -f1)
 
-echo
-echo "${1^^} dashboard => https://$ip/"
-echo 
+  echo
+  echo "${1^^} $node dashboard => https://$ip/"
+  echo 
+
+done
+

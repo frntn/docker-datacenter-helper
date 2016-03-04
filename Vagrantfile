@@ -21,36 +21,50 @@ docker run --rm docker/trusted-registry info | bash
 docker run --rm docker/trusted-registry install | bash
 DTR
 
-ucp_nodes = ["controller", "node1", "node2"]
+ucp_nodes = ["node1", "node2", "node3"]
+ucp_controllers = ["controllerA", "controllerB"]
+dtr_registries = ["registry"]
+
+#ucp_isrunner = ENV.has_key?('GITLABCI_') ? ENV['UCP_ISRUNNER'] : 'no'
 
 Vagrant.configure(2) do |config|
   config.vm.box = "boxcutter/ubuntu1404"
   config.vm.network "public_network", bridge: "wlan0"
 
-  # Docker suggests a minimum of 1.50 GB for UCP host
-  # 1GB for all will be enough for testing purpose
-  config.vm.provider :virtualbox do |vbox|
-    vbox.memory = 1024
+  # Use cache across VMs
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box # or :machine
+    config.cache.auto_detect = true
   end
 
   # DTR provisioning
-  config.vm.define :registry do |dtr|
-    dtr.vm.provision "docker", images: ["docker/trusted-registry"]
-    dtr.vm.provision "shell" , inline: $DTR_INSTALL
-    dtr.vm.hostname = "registry.docker.local"
+  dtr_registries.each do |dtr_registry|
+    config.vm.define dtr_registry do |registry|
+      registry.vm.provision "docker", images: ["docker/trusted-registry"]
+      registry.vm.provision "shell" , inline: $DTR_INSTALL
+      registry.vm.hostname = "registry.docker.local"
+    end
   end
 
   # UCP nodes and controller provisioning
-  ucp_nodes.each do |ucp_node|
+  ucp_all = ucp_controllers + ucp_nodes
+  ucp_all.each do |ucp_node|
     config.vm.define ucp_node do |node|
       node.vm.provision "docker", images: ["docker/ucp"]
       node.vm.hostname = "#{ucp_node}.docker.local"
+      # Docker suggests a minimum of 1.50 GB for UCP host
+      # 1GB for all will be enough for testing purpose
+      node.vm.provider :virtualbox do |vbox|
+        vbox.memory = 1024
+      end
     end
   end
 
   # UCP controller-specific provisioning
-  config.vm.define :controller do |ucp|
-    ucp.vm.provision "shell" , inline: $UCP_INSTALL
+  ucp_controllers.each do |ucp_controller|
+    config.vm.define ucp_controller do |controller|
+      controller.vm.provision "shell" , inline: $UCP_INSTALL
+    end
   end
 
 end
