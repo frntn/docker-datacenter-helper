@@ -1,0 +1,25 @@
+---
+dtr:
+  nodes:
+    - 
+      name: cedatt
+ucp:
+  nodes:
+    -
+      name: gideon
+      type: controller
+    -
+      name: hark
+      type: controller
+    -
+      name: caff
+      type: controller
+    -
+      name: ranklin
+    -
+      name: zaul
+    -
+      name: harlon
+
+
+

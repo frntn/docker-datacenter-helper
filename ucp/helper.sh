@@ -1,29 +1,12 @@
 #!/bin/bash
-
+{
 set -u
-
 cd "$(dirname "$0")"
-
-# UCP defaults
-: ${UCP_ADMIN_USER:="admin"}
-: ${UCP_ADMIN_PASSWORD:="orca"}
-: ${UCP_PURGE:=false}
-export UCP_ADMIN_USER UCP_ADMIN_PASSWORD UCP_PURGE
-
-# UCP nodes
-: ${UCP_CONTROLLERS:="controllerA"}
-: ${UCP_CLIENTS:="client1 client2"}
-UCP_NODES="$UCP_CONTROLLERS $UCP_CLIENTS"
-export UCP_CONTROLLERS UCP_CLIENTS UCP_NODES
 
 # Get main controller infos :
 # =========================
 #   1- NAME
-for controller in $UCP_CONTROLLERS
-do
-  main="$controller"
-  break
-done
+main="$UCP_MAIN_CONTROLLER"
 
 set -x
 
@@ -34,11 +17,11 @@ ipucp=$(vagrant ssh $main -c "ip addr show dev eth1" | grep -E '\<inet\>' | awk 
 fingerprint="$(openssl s_client -connect "${ipucp}:443" </dev/null 2>/dev/null | openssl x509 -fingerprint -noout | cut -d'=' -f2)"
 
 
-echo; echo "----> Join 'Cluster Controllers' <----"; echo
+echo; echo "----> Join 'Replica Controllers' <----"; echo
 # Join replica controllers :
 # =========================
 replica="--replica"
-for node in $UCP_CONTROLLERS
+for node in $UCP_REPLICA_CONTROLLERS
 do
   [ "$node" = "$main" ] && continue
 
@@ -69,7 +52,7 @@ echo; echo "----> Join 'Endpoints Nodes' <----"; echo
 # Join endpoint nodes :
 # ====================
 replica=""
-for node in $UCP_CLIENTS
+for node in $UCP_ENDPOINTS
 do
   echo; echo "------> $node"; echo
   vagrant up $node
@@ -123,4 +106,4 @@ echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-store-opt kv.keyfile=/var/lib/docker
 sudo service docker restart
 "
 done
-
+}

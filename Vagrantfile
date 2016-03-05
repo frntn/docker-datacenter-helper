@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
 $UCP_INSTALL = <<UCP
 ip=$(ip addr show dev eth1 | grep -E "\\<inet\\>" | awk '{print $2}' | cut -d'/' -f1)
 docker run --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp install --host-address $ip --san ${HOSTNAME}.docker.local --san "*.tcp.ngrok.io"
@@ -21,12 +23,30 @@ docker run --rm docker/trusted-registry info | bash
 docker run --rm docker/trusted-registry install | bash
 DTR
 
-ucp_main_controller = ["controllerA"]
-ucp_replica_controllers = ["controllerB"]
-ucp_nodes = ["client1", "client2", "client3"]
-dtr_registries = ["registry"]
+boxes = YAML::load(File.read(File.dirname(__FILE__) + "/boxes.yaml"))
 
-#token = ENV.has_key?('GITLABCI_TOKEN') ? ENV['GITLABCI_TOKEN'] : ''
+# UCP nodes
+if boxes['ucp'].include?('nodes')
+  nodes=boxes['ucp']['nodes']
+  ucp_controllers = []
+  ucp_endpoints = []
+  nodes.each { |node|
+    if node.include?('type') && node['type'] == 'controller'
+      ucp_controllers.push(node['name']) 
+    else
+      ucp_endpoints.push(node['name'])
+    end
+  }
+end
+ucp_main_controller = [ucp_controllers.shift]
+ucp_replica_controllers = ucp_controllers
+
+# DTR nodes
+if boxes['dtr'].include?('nodes')
+  nodes=boxes['dtr']['nodes']
+  dtr_registries = []
+  nodes.each { |node| dtr_registries.push(node['name']) }
+end
 
 Vagrant.configure(2) do |config|
   config.vm.box = "boxcutter/ubuntu1404"
@@ -43,24 +63,24 @@ Vagrant.configure(2) do |config|
     config.vm.define dtr_registry do |registry|
       registry.vm.provision "docker", images: ["docker/trusted-registry"]
       registry.vm.provision "shell" , inline: $DTR_INSTALL
-      registry.vm.hostname = "registry.docker.local"
+      registry.vm.hostname = "#{registry}.docker.local"
     end
   end
 
-  # UCP nodes and controller provisioning
-  ucp_all = ucp_main_controller + ucp_replica_controllers + ucp_nodes
-  ucp_all.each do |ucp_node|
-    config.vm.define ucp_node do |node|
+  # UCP nodes provisioning
+  ucp_nodes = ucp_main_controller + ucp_replica_controllers + ucp_endpoints
+  ucp_nodes.each do |ucp_endpoint|
+    config.vm.define ucp_endpoint do |node|
       node.vm.provision "docker", images: ["docker/ucp"]
-      node.vm.hostname = "#{ucp_node}.docker.local"
+      node.vm.hostname = "#{ucp_endpoint}.docker.local"
       # Docker suggests a minimum of 1.50 GB for UCP hosts
       node.vm.provider :virtualbox do |vbox|
-        vbox.memory = 1512
+        vbox.memory = 1024
       end
     end
   end
 
-  # UCP controller-specific provisioning
+  # UCP main controller specific provisioning
   ucp_main_controller.each do |ucp_controller|
     config.vm.define ucp_controller do |controller|
       controller.vm.provision "shell" , inline: $UCP_INSTALL

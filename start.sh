@@ -1,11 +1,16 @@
 #!/bin/bash
 
-{
+#echo "== ${UCP_MAIN_CONTROLLER:="controller1"}"
+#echo "-- ${UCP_REPLICA_CONTROLLERS:=""}"
+#echo ",, ${UCP_ENDPOINTS:="client1 client2"}"
+#exit
 
+{
+set -u
 cd "$(dirname "$0")"
 
 function get_ip {
-  node=${1:-"controllerA"}
+  node=${1:-"controller"}
   vagrant ssh $node -c      \
     'ip addr show dev eth1' \
     | grep -E '\<inet\>'    \
@@ -33,15 +38,15 @@ function start_ucp {
   time vagrant up $UCP_NODES
 
   # Get controllerA IP address + UCP authorization token
-  controllerAip=$(get_ip)
+set -x
+  ucp_main_controller_ip=$(get_ip $UCP_MAIN_CONTROLLER)
   authorization=$(
   curl -sSLk -X POST \
     -d @<(echo '{"username":"'${UCP_ADMIN_USER}'","password":"'${UCP_ADMIN_PASSWORD}'"}') \
     --header "Content-Type: application/json;charset=UTF-8"  \
-    "https://$controllerAip/auth/login" | jq -r '.auth_token'
+    "https://$ucp_main_controller_ip/auth/login" | jq -r '.auth_token'
   )
   # Embed downloaded license
-set -x
   subscription=${UCP_LICENSE:-"docker_subscription.lic"}
   echo '{"license_config":'$(jq -c '.' $subscription)',"auto_refresh": true}' > mylicense.lic
   # Upload license to controllerA
@@ -49,7 +54,7 @@ set -x
     -d @mylicense.lic \
     --header "Content-Type: application/json;charset=UTF-8" \
     --header "Authorization: Bearer $authorization"  \
-    "https://$controllerAip/api/config/license"
+    "https://$ucp_main_controller_ip/api/config/license"
 set +x
 
   # Join nodes and set multi-host networking
@@ -66,6 +71,19 @@ set +x
   docker info | grep -E "^Nodes:|^Cluster Managers:"
 }
 
+num_controllers=1
+num_endpoints=3
+while getopts c:e:t: opt
+do
+  case $opt in
+    c) num_controllers=$OPTARG ;;
+    e) num_endpoints=$OPTARG   ;;
+    t) gitlabci_token=$OPTARG  ;;
+  esac
+done
+
+shift $(( OPTIND - 1))
+
 # DTR nodes
 DTR_NODES="registry"
 
@@ -78,17 +96,18 @@ UCP_ADMIN_PASSWORD="orca"
 export UCP_ADMIN_USER UCP_ADMIN_PASSWORD UCP_PURGE
 
 # UCP nodes
-: ${UCP_CONTROLLERS:="controllerA controllerB"}
-: ${UCP_CLIENTS:="client1 client2"}
-UCP_NODES="$UCP_CONTROLLERS $UCP_CLIENTS"
-export UCP_CONTROLLERS UCP_CLIENTS UCP_NODES
+: ${UCP_MAIN_CONTROLLER:="controller1"}
+: ${UCP_REPLICA_CONTROLLERS:=""}
+: ${UCP_ENDPOINTS:="client1 client2"}
+UCP_NODES="$UCP_MAIN_CONTROLLER $UCP_REPLICA_CONTROLLERS $UCP_ENDPOINTS"
+export UCP_MAIN_CONTROLLER UCP_REPLICA_CONTROLLERS UCP_ENDPOINTS UCP_NODES
 
 action="${1,,}"
 case "$action" in
   'ucp')
     main="start_$action"
     snapshot_nodes="$UCP_NODES"
-    dashboard_nodes="$UCP_CONTROLLERS"
+    dashboard_nodes="$UCP_MAIN_CONTROLLER $UCP_REPLICA_CONTROLLERS"
     ;;
   'dtr'|'dtr_demo') 
     main="start_$action"

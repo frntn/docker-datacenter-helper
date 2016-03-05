@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+boxes = YAML::load(File.read(File.dirname(__FILE__) + "/boxes.yaml"))
+
+# UCP nodes
+if boxes['ucp'].include?('nodes')
+
+  ucp_controllers = []
+  ucp_endpoints = []
+
+  nodes=boxes['ucp']['nodes']
+  nodes.each { |node|
+    if node.include?('type') && node['type'] == 'controller'
+      ucp_controllers.push(node['name']) 
+    else
+      ucp_endpoints.push(node['name'])
+    end
+  }
+
+  ucp_main_controller = [ucp_controllers.shift]
+  ucp_replica_controllers = ucp_controllers
+
+  system(
+    {
+      "UCP_MAIN_CONTROLLER"     => "#{ucp_main_controller.flatten.join(' ')}", 
+      "UCP_REPLICA_CONTROLLERS" => "#{ucp_replica_controllers.flatten.join(' ')}", 
+      "UCP_ENDPOINTS"           => "#{ucp_endpoints.flatten.join(' ')}", 
+    }, 
+    "./start.sh ucp"
+  )
+
+end
