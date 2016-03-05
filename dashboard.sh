@@ -9,7 +9,7 @@ esac
 
 for node in $nodes
 do
-  ip=$(vagrant ssh $node -c      \
+  ip=$(vagrant ssh $node -c \
     'ip addr show dev eth1' \
     | grep -E '\<inet\>'    \
     | awk '{print $2}'      \

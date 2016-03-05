@@ -3,3 +3,4 @@ ucp/bundle/*
 !ucp/bundle/.keep
 logs/*
 !logs/.keep
+*.lic

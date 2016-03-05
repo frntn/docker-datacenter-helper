@@ -3,7 +3,7 @@
 
 $UCP_INSTALL = <<UCP
 ip=$(ip addr show dev eth1 | grep -E "\\<inet\\>" | awk '{print $2}' | cut -d'/' -f1)
-docker run --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp install --host-address $ip --san controller.docker.local --san "*.tcp.ngrok.io"
+docker run --rm --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp install --host-address $ip --san ${HOSTNAME}.docker.local --san "*.tcp.ngrok.io"
 
 # install ngrok
 sudo apt-get update
@@ -21,11 +21,12 @@ docker run --rm docker/trusted-registry info | bash
 docker run --rm docker/trusted-registry install | bash
 DTR
 
-ucp_nodes = ["node1", "node2", "node3"]
-ucp_controllers = ["controllerA", "controllerB"]
+ucp_main_controller = ["controllerA"]
+ucp_replica_controllers = ["controllerB"]
+ucp_nodes = ["client1", "client2", "client3"]
 dtr_registries = ["registry"]
 
-#ucp_isrunner = ENV.has_key?('GITLABCI_') ? ENV['UCP_ISRUNNER'] : 'no'
+#token = ENV.has_key?('GITLABCI_TOKEN') ? ENV['GITLABCI_TOKEN'] : ''
 
 Vagrant.configure(2) do |config|
   config.vm.box = "boxcutter/ubuntu1404"
@@ -47,21 +48,20 @@ Vagrant.configure(2) do |config|
   end
 
   # UCP nodes and controller provisioning
-  ucp_all = ucp_controllers + ucp_nodes
+  ucp_all = ucp_main_controller + ucp_replica_controllers + ucp_nodes
   ucp_all.each do |ucp_node|
     config.vm.define ucp_node do |node|
       node.vm.provision "docker", images: ["docker/ucp"]
       node.vm.hostname = "#{ucp_node}.docker.local"
-      # Docker suggests a minimum of 1.50 GB for UCP host
-      # 1GB for all will be enough for testing purpose
+      # Docker suggests a minimum of 1.50 GB for UCP hosts
       node.vm.provider :virtualbox do |vbox|
-        vbox.memory = 1024
+        vbox.memory = 1512
       end
     end
   end
 
   # UCP controller-specific provisioning
-  ucp_controllers.each do |ucp_controller|
+  ucp_main_controller.each do |ucp_controller|
     config.vm.define ucp_controller do |controller|
       controller.vm.provision "shell" , inline: $UCP_INSTALL
     end
