@@ -28,7 +28,7 @@ if boxes['ucp'].include?('nodes')
       "UCP_REPLICA_CONTROLLERS" => "#{ucp_replica_controllers.flatten.join(' ')}", 
       "UCP_ENDPOINTS"           => "#{ucp_endpoints.flatten.join(' ')}", 
     }, 
-    "./start.sh ucp"
+    "./helper.sh ucp"
   )
 
 end
