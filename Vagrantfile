@@ -67,7 +67,7 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  # UCP nodes provisioning
+  # UCP nodes provisioning : pull ucp image, setup hostname & memory
   ucp_nodes = ucp_main_controller + ucp_replica_controllers + ucp_endpoints
   ucp_nodes.each do |ucp_endpoint|
     config.vm.define ucp_endpoint do |node|
@@ -80,7 +80,15 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  # UCP main controller specific provisioning
+  # UCP controllers provisioning : install & register gitlabci
+  ucp_controllers = ucp_main_controller + ucp_replica_controllers
+  ucp_controllers.each do |ucp_controller|
+    config.vm.define ucp_controller do |controller|
+      controller.vm.provision "shell" , inline: $GITLABCI_INSTALL
+    end
+  end
+
+  # UCP main controller specific provisioning : start ucp, install ngrok
   ucp_main_controller.each do |ucp_controller|
     config.vm.define ucp_controller do |controller|
       controller.vm.provision "shell" , inline: $UCP_INSTALL

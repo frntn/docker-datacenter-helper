@@ -37,8 +37,9 @@ function start_ucp {
   # Start all UCP nodes
   time vagrant up $UCP_NODES
 
-  # Get controllerA IP address + UCP authorization token
-set -x
+  echo; echo "---------- END VAGRANT PROVISIONING ----------"; echo
+
+  echo "--> Get authorization token"
   ucp_main_controller_ip=$(get_ip $UCP_MAIN_CONTROLLER)
   authorization=$(
   curl -sSLk -X POST \
@@ -46,27 +47,114 @@ set -x
     --header "Content-Type: application/json;charset=UTF-8"  \
     "https://$ucp_main_controller_ip/auth/login" | jq -r '.auth_token'
   )
-  # Embed downloaded license
+
+  echo "--> Upload license"
   subscription=${UCP_LICENSE:-"docker_subscription.lic"}
   echo '{"license_config":'$(jq -c '.' $subscription)',"auto_refresh": true}' > mylicense.lic
-  # Upload license to controllerA
   curl -sSLk -X POST \
     -d @mylicense.lic \
     --header "Content-Type: application/json;charset=UTF-8" \
     --header "Authorization: Bearer $authorization"  \
     "https://$ucp_main_controller_ip/api/config/license"
-set +x
 
-  # Join nodes and set multi-host networking
-  time ./ucp/helper.sh
+
+  echo "--> Join nodes to main cluster controller ($main)"
+  main="$UCP_MAIN_CONTROLLER"
+  ipucp=$(vagrant ssh $main -c "ip addr show dev eth1" | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
+  fingerprint="$(openssl s_client -connect "${ipucp}:443" </dev/null 2>/dev/null | openssl x509 -fingerprint -noout | cut -d'=' -f2)"
+
+  # Join replica controllers :
+  replica="--replica"
+  for node in $UCP_REPLICA_CONTROLLERS
+  do
+    [ "$node" = "$main" ] && continue
+
+    echo "----> node '$node' (replica controller)"
+    #vagrant up $node
+    ipnode=$(vagrant ssh $node -c "ip addr show dev eth1" | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
+    vagrant ssh $node -c "
+      docker run \
+        --rm          \
+        --tty         \
+        --name ucp    \
+        --interactive \
+        -e UCP_ADMIN_USER=$UCP_ADMIN_USER             \
+        -e UCP_ADMIN_PASSWORD=$UCP_ADMIN_PASSWORD     \
+        -v /var/run/docker.sock:/var/run/docker.sock  \
+                                                      \
+        docker/ucp join             \
+        --san ${node}.docker.local  \
+        --host-address $ipnode      \
+        --url https://$ipucp        \
+        --fingerprint $fingerprint  \
+        --fresh-install             \
+        $replica
+    "
+  done
+
+  echo "--> Join 'Endpoints Nodes'"
+  # Join endpoint nodes :
+  # ====================
+  replica=""
+  for node in $UCP_ENDPOINTS
+  do
+    echo "----> node '$node' (endpoint)"
+    #vagrant up $node
+    ipnode=$(vagrant ssh $node -c "ip addr show dev eth1" | grep -E '\<inet\>' | awk '{print $2}' | cut -d'/' -f1)
+    vagrant ssh $node -c "
+      docker run      \
+        --rm          \
+        --tty         \
+        --name ucp    \
+        --interactive \
+        -e UCP_ADMIN_USER=$UCP_ADMIN_USER             \
+        -e UCP_ADMIN_PASSWORD=$UCP_ADMIN_PASSWORD     \
+        -v /var/run/docker.sock:/var/run/docker.sock  \
+                                                      \
+        docker/ucp join             \
+        --san ${node}.docker.local  \
+        --host-address $ipnode      \
+        --url https://$ipucp        \
+        --fingerprint $fingerprint  \
+        --fresh-install             \
+        $replica
+    "
+  done
+
+  # overlay networks require access to a key-value store
+  echo "--> Add Multi-Host Networking Support to Docker Daemons"
+  for node in $UCP_NODES
+  do
+    echo "----> node '$node'"
+    vagrant ssh $node -c "
+      ip=\$(ip addr show dev eth1 | grep -E '\\<inet\\>' | awk '{print \$2}' | cut -d'/' -f1)
+      {
+        echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-advertise '\$ip':12376\"'
+        echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-store etcd://$ipucp:12379\"'
+        echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-store-opt kv.cacertfile=/var/lib/docker/discovery_certs/ca.pem\"'
+        echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-store-opt kv.certfile=/var/lib/docker/discovery_certs/cert.pem\"'
+        echo 'DOCKER_OPTS=\"\$DOCKER_OPTS --cluster-store-opt kv.keyfile=/var/lib/docker/discovery_certs/key.pem\"'
+      } | sudo tee -a /etc/default/docker
+      sudo service docker restart
+    "
+  done
 
   # wait for all docker engines to restart and sync with 
   # their new multi-host networking setup (can take some time...)
   sleep 240
 
-  # load config so that the local docker client talk to "remote" UCP
-  cd ucp/bundle/
+  echo "--> Download Client Bundle"
+  cd ucp/bundle
+  AUTHTOKEN=$(curl -sk -d "{\"username\":\"$UCP_ADMIN_USER\",\"password\":\"$UCP_ADMIN_PASSWORD\"}" https://$ipucp/auth/login | jq -r .auth_token)
+  curl -sSLk -H "Authorization: Bearer $AUTHTOKEN" https://$ipucp/api/clientbundle -o bundle.zip
+
+  echo "--> Extract Client Bundle"
+  unzip -o bundle.zip
+  rm bundle.zip
+
+  echo "--> Load Client Bundle"
   source env.sh
+  echo "--> Load Client Bundle"
   docker version
   docker info | grep -E "^Nodes:|^Cluster Managers:"
 }
