@@ -29,10 +29,8 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 **Pre-requisite:**
 
 On my laptop, my network interface is either `eth0` (cable) or `wlan0` (wifi). 
-
 You should check the `config.vm.network` parameter in the `Vagrantfile` 
 if it reflects your setup. If not update it accordingly.
-
 On linux you can extract that information with this simple command :
 `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`_
 
