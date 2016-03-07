@@ -16,12 +16,12 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 - [Usage](#usage)
   - [A. Docker Trusted Registry](#a-docker-trusted-registry)
-    - [A1. start your DTR](#a1-start-your-dtr)
-    - [A2. dtr asciicast](#a2-dtr-asciicast)
+    - [A1. Start your DTR](#a1-start-your-dtr)
+    - [A2. DTR asciicast](#a2-dtr-asciicast)
   - [B. Universal Control Plane](#b-universal-control-plane)
-    - [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
-    - [B2. ucp asciicast](#b2-ucp-asciicast)
-    - [B3. launch demo](#b3-launch-demo)
+    - [B1. Start your UCP cluster](#b1-start-your-ucp-cluster)
+    - [B2. UCP asciicast](#b2-ucp-asciicast)
+    - [B3. Launch demo](#b3-launch-demo)
 - [Miscellaneous](#miscellaneous)
 
 ## Usage
@@ -79,12 +79,14 @@ You'll endup with a full functionnal and ready to use universal docker platform.
 
 Upon completion, URL(s) to your controller(s) dashboard(s) will be echoed to stdout.
 
-#### A2. UCP Asciicast
+#### B2. UCP Asciicast
 
 Below is an asciicast capturing the `start_ucp` script output with the default settings :
+
 [![dtr-asciicast](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t.png)](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t?autoplay=1)
 
 And here is an asciicast capturing the log file content for that same `start_ucp` exec :
+
 [![dtr-asciicast](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6.png)](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6?autoplay=1&speed=2)
 
 #### B3. launch demo
