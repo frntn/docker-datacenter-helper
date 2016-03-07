@@ -23,7 +23,7 @@ docker run --rm docker/trusted-registry info | bash
 docker run --rm docker/trusted-registry install | bash
 DTR
 
-boxes = YAML::load(File.read(File.dirname(__FILE__) + "/boxes.yaml"))
+boxes = YAML::load(File.read(File.dirname(__FILE__) + "/nodes.yml"))
 
 # UCP nodes
 if boxes['ucp'].include?('nodes')
@@ -63,7 +63,7 @@ Vagrant.configure(2) do |config|
     config.vm.define dtr_registry do |registry|
       registry.vm.provision "docker", images: ["docker/trusted-registry"]
       registry.vm.provision "shell" , inline: $DTR_INSTALL
-      registry.vm.hostname = "#{registry}.docker.local"
+      registry.vm.hostname = "#{dtr_registry}.docker.local"
     end
   end
 

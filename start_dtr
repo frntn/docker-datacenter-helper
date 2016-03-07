@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+boxes = YAML::load(File.read(File.dirname(__FILE__) + "/nodes.yml"))
+
+# UCP nodes
+if boxes['dtr'].include?('nodes')
+
+  dtr_registries = []
+
+  nodes=boxes['dtr']['nodes']
+  nodes.each { |node|
+    dtr_registries.push(node['name']) 
+  }
+
+  system(
+    {
+      "DTR_REGISTRIES" => "#{dtr_registries.flatten.join(' ')}", 
+    }, 
+    "./helper.sh dtr"
+  )
+
+end

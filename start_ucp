@@ -2,7 +2,7 @@
 
 require 'yaml'
 
-boxes = YAML::load(File.read(File.dirname(__FILE__) + "/boxes.yaml"))
+boxes = YAML::load(File.read(File.dirname(__FILE__) + "/nodes.yml"))
 
 # UCP nodes
 if boxes['ucp'].include?('nodes')

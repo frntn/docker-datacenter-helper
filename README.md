@@ -19,8 +19,7 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
     - [A3. launch demo](#a3-launch-demo)
   - [B. Universal Control Plane](#b-universal-control-plane)
     - [B1. start your UCP cluster](#b1-start-your-ucp-cluster)
-    - [B2. configure the service](#b2-configure-the-service)
-    - [B3. launch demo](#b3-launch-demo)
+    - [B2. launch demo](#b2-launch-demo)
 - [Miscellaneous](#miscellaneous)
 
 ## Usage
@@ -104,47 +103,31 @@ You can now open the dashboard of your custom Jenkins instance.
 #### B1. start your UCP cluster
 
 ```bash
-./start.sh ucp
+./start_ucp   # <-- approx. 45min for a cluster of 6 nodes
 ```
 
-This will :
+This will start all ucp nodes defined in `nodes.yml`
 
-1. Destroy previously created UCP vms (if any)
-2. Spin up the master `controller` vm
-3. Spin up the replicas `node1` and `node2` vm
-4. Configure multi-host networking
+The script will automate all the install process (including license upload).
+You'll endup with a full functionnal and ready to use UCP cluster.
 
-Now you just have to setup your UCP instance and you're ready to go
+Upon completion, URL(s) to your controller(s) dashboard(s) will be echoed to stdout.
+Connect to one of these with default credentials : `admin`/`orca`
 
-#### B2. configure the service
+#### B2. launch demo
 
-**Get** UCP dashboard url
-
-```bash
-./dashboard.sh ucp
-```
-
-**Open** your browser to the given url (the certificate is not trusted so 
-you have to accept the *insecure* connection. That's the expected behavior).
-
-**Connect** using defaults `admin`/`orca` 
-
-**Upload** your license in the settings page
-
-![controller-addlicense](img/controller-addlicense.png?raw=true)
-
-**Change** the default passowrd in the profile page 
-
-![controller-editprofile](img/controller-editprofile.png?raw=true)
-
-#### B3. launch demo
-
-We now want to use the docker client against the UCP cluster :
+To use the demo application, we want our local docker client to point to this newly created UCP cluster :
 
 ```bash
+# before check
+docker version # <-- the 'Server' section mentions 'Version: x.y.z'
+
+# load environment variable so your docker client points to remote docker server
 cd ucp/bundle/
 source env.sh  # <-- your docker client now speaks with your "remote" UCP cluster
-docker version # <-- the 'server:' now mentions 'ucp/0.8.0'
+
+# after check
+docker version # <-- the 'Server' now mentions 'Version: ucp/x.y.z'
 ```
 
 We can now spinup the demo application :
