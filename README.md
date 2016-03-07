@@ -1,6 +1,6 @@
 # frntn/docker-datacenter-helper
 
-**Get Docker's official datacenter solutions _up & running_ in no time**  
+**Get Docker's official datacenter solutions _up & running_ in no time.**
 **100% _unattended_ installation !**
 
 Docker Datacenter solution is made of two commercial products :
@@ -26,9 +26,11 @@ You can get a free 30-days trial here : https://hub.docker.com/enterprise/trial
 
 ## Usage
 
-*Note1: if you want __unattended install__ you must specify your network interface in 
-`Vagrantfile`->`config.vm.network`. On linux, you can extract this information
-using this command : `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
+*Note1: Be sure to update your network interface in 
+`Vagrantfile`->`config.vm.network`.
+Mine is either `eth0` (cable) or `wlan0` (wifi). If you're not sure what your
+interface name is, you can extract this information using this command on linux :
+`ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
 
 *Note2: I strongly recommend the usage of __vagrant cachier__ plugin 
 [more info](https://github.com/fgrehm/vagrant-cachier)*
@@ -53,9 +55,11 @@ Upon completion, URL to your registry dashboard will be echoed to stdout.
 #### A2. DTR Asciicast
 
 Below is an asciicast capturing the `start_dtr` script output with the default settings :
+
 [![dtr-asciicast](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4.png)](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4?autoplay=1&speed=2&theme=asciinema&size=medium)
 
 And here is an asciicast capturing the log file content for that same `start_dtr` exec :
+
 [![dtr-asciicast](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4.png)](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4?autoplay=1&speed=2&theme=asciinema&size=medium)
 
 ### B. Universal Control Plane
@@ -78,10 +82,10 @@ Upon completion, URL(s) to your controller(s) dashboard(s) will be echoed to std
 #### A2. UCP Asciicast
 
 Below is an asciicast capturing the `start_ucp` script output with the default settings :
-[![dtr-asciicast](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4.png)](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4?autoplay=1&speed=2&theme=asciinema&size=medium)
+[![dtr-asciicast](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t.png)](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t?autoplay=1)
 
 And here is an asciicast capturing the log file content for that same `start_ucp` exec :
-[![dtr-asciicast](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4.png)](https://asciinema.org/a/5uyrknsjg7u2fad6ii0wgizd4?autoplay=1&speed=2&theme=asciinema&size=medium)
+[![dtr-asciicast](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6.png)](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6?autoplay=1&speed=2)
 
 #### B3. launch demo
 
