@@ -1,4 +1,12 @@
 ---
+gitlabci:
+  #  token: xxxxxxxxxxxxxxxxxxxx
+  name: Demo Override
+  tags:
+    - toto
+    - tata
+    - ucp
+
 dtr:
   nodes:
     - 

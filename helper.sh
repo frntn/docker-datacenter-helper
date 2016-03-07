@@ -14,7 +14,15 @@ function get_ip {
     | cut -d'/' -f1
 }
 
-function start_dtr {
+function create_snapshot {
+  echo "==> Create ${action^^} snapshots ($func)"
+  for node in $snapshot_nodes
+  do 
+    vagrant snapshot save "$node" "$func"
+  done
+}
+
+function dtr_provision {
   # Destroy previous if asked
   if [ "$DTR_PURGE" = true ]
   then
@@ -25,7 +33,9 @@ function start_dtr {
   vagrant up $DTR_NODES
 
   echo; echo "---------- END VAGRANT PROVISIONING ----------"; echo
+}
 
+function dtr_configure {
   for node in $DTR_NODES
   do
     curlopts="-sSLk -X PUT"
@@ -53,7 +63,7 @@ function start_dtr_demo {
   vagrant ssh $DTR_NODES -c /vagrant/dtr/demo.sh
 }
 
-function start_ucp {
+function ucp_provision {
   # Destroy previous if asked
   if [ "$UCP_PURGE" = true ]
   then
@@ -64,6 +74,9 @@ function start_ucp {
   vagrant up $UCP_NODES
 
   echo; echo "---------- END VAGRANT PROVISIONING ----------"; echo
+}
+
+function ucp_configure {
 
   echo "==> Get authorization token"
   ucp_main_controller_ip=$(get_ip $UCP_MAIN_CONTROLLER)
@@ -171,13 +184,13 @@ function start_ucp {
   echo "==> Load Client Bundle"
   source env.sh
 
+  echo; echo "---------- END UCP CONFIGURATION ----------"; echo
+
   echo "==> Check docker version ('Version: ucp/x.x.x' expected for 'Server:' section)"
   docker version | sed -n '1,2p;9,10p' | awk '{print "    "$0}'
 
   echo "==> Show Nodes and Cluster Managers count"
   docker info | grep -E "^Nodes:|^Cluster Managers:" | awk '{print "    "$0}'
-
-  echo; echo "---------- END UCP CONFIGURATION ----------"; echo
 }
 
 # === BEGIN ===================================================================
@@ -203,13 +216,12 @@ UCP_PASS="orca"
 action="${1,,}"
 case "$action" in
   'ucp')
-    main="start_$action"
     snapshot_nodes="$UCP_NODES"
     dashboard_nodes="$UCP_MAIN_CONTROLLER $UCP_REPLICA_CONTROLLERS"
     user="$UCP_USER"
     pass="$UCP_PASS"
     ;;
-  'dtr'|'dtr_demo') 
+  'dtr') 
     main="start_$action"
     snapshot_nodes="$DTR_NODES"
     dashboard_nodes="$DTR_NODES"
@@ -227,19 +239,27 @@ logdate="$(date +%Y%m%d_%H%M)"
 logf="logs/${action}_${logdate}.log"
 echo; echo "Log file is '$logf'"; echo
 
-# MAIN()
-$main >> $logf
-
-# SNAPSHOTS
+# PROVISION
+echo "==> Provision ${action^^} nodes"
 cd "$(dirname "$0")"
-echo "==> Create Snapshots"                                               #>> $logf
-for node in $snapshot_nodes; do vagrant snapshot save $node $action; done #>> $logf
+func="${action}_provision"
+$func >> $logf
+create_snapshot
+
+# CONFIGURE
+echo "==> Configure ${action^^} nodes"
+cd "$(dirname "$0")"
+func="${action}_configure"
+$func >> $logf
+create_snapshot
 
 # DASHBOARDS
 echo
 echo "=========================================" 
 echo "= User: $user"
+echo "= ------------------------------------- ="
 echo "= Password: $pass"
+echo "= ------------------------------------- ="
 echo "= Dashboard URL(s):"
 echo "="
 for node in $dashboard_nodes
