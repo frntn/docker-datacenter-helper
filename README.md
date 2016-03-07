@@ -32,9 +32,6 @@ Mine is either `eth0` (cable) or `wlan0` (wifi). If you're not sure what your
 interface name is, you can extract this information using this command on linux :
 `ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`*
 
-*Note2: I strongly recommend the usage of __vagrant cachier__ plugin 
-[more info](https://github.com/fgrehm/vagrant-cachier)*
-
 ### A. Docker Trusted Registry
 
 #### A1. start your DTR
