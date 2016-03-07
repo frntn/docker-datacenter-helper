@@ -33,7 +33,7 @@ You should check the `config.vm.network` parameter in the `Vagrantfile`
 if it reflects your setup. If not update it accordingly.
 
 On linux you can extract that information with this simple command :
-`ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`_
+`ip -o -4 route get 8.8.8.8 | cut -f5 -d' '`
 
 ### A. Docker Trusted Registry
 
