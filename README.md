@@ -56,11 +56,11 @@ Upon completion, URL to your registry dashboard will be echoed to stdout.
 
 Below is an asciicast capturing the `start_dtr` script output with the default settings :
 
-[![dtr-asciicast-stdout](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t.png)](https://asciinema.org/a/8uogw0mfmgvpaeqqc7ezgsi9t?autoplay=1)
+[![dtr-asciicast-stdout](https://asciinema.org/a/cqwsraz40gcgscka3gguqfvz0.png)](https://asciinema.org/a/cqwsraz40gcgscka3gguqfvz0?autoplay=1)
 
 And here is an asciicast capturing the log file content for that same `start_dtr` exec :
 
-[![dtr-asciicast-logfile](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6.png)](https://asciinema.org/a/22g7wcaswtioe3is4twgy7ff6?autoplay=1&speed=2)
+[![dtr-asciicast-logfile](https://asciinema.org/a/ccor16nadmss9hn76v1tq6fes.png)](https://asciinema.org/a/ccor16nadmss9hn76v1tq6fes?autoplay=1&speed=2)
 
 ### B. Universal Control Plane
 
