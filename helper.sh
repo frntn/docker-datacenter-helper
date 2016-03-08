@@ -19,7 +19,7 @@ function create_snapshot {
   for node in $snapshot_nodes
   do 
     vagrant snapshot save "$node" "$func"
-  done
+  done >> $logf
 }
 
 function dtr_provision {
@@ -257,9 +257,8 @@ create_snapshot
 echo
 echo "=========================================" 
 echo "= User: $user"
-echo "= ------------------------------------- ="
 echo "= Password: $pass"
-echo "= ------------------------------------- ="
+echo "= ---------------------------------------"
 echo "= Dashboard URL(s):"
 echo "="
 for node in $dashboard_nodes
