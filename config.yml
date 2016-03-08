@@ -1,33 +1,25 @@
 ---
-gitlabci:
-  #  token: xxxxxxxxxxxxxxxxxxxx
-  name: Demo Override
-  tags:
-    - toto
-    - tata
-    - ucp
-
+# Docker Trusted Registry
 dtr:
   nodes:
     - 
       name: cedatt
+
+# Universal Control Plane
 ucp:
   nodes:
     -
       name: gideon
       type: controller
     -
-      name: hark
+      name: harkon
       type: controller
     -
-      name: caff
+      name: caffon
       type: controller
     -
-      name: ranklin
+      name: raklin
     -
-      name: zaul
+      name: zaulin
     -
-      name: harlon
-
-
-
+      name: harlin
