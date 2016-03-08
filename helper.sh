@@ -2,7 +2,6 @@
 
 {
 set -u
-cd "$(dirname "$0")"
 
 function get_ip {
   node=${1:-"controller"}
@@ -212,6 +211,8 @@ UCP_NODES="$UCP_MAIN_CONTROLLER $UCP_REPLICA_CONTROLLERS $UCP_ENDPOINTS"
 UCP_USER="admin"
 UCP_PASS="orca"
 
+projectroot="$(dirname "$0")"
+
 # DISPATCHER
 action="${1,,}"
 case "$action" in
@@ -238,17 +239,18 @@ esac
 logdate="$(date +%Y%m%d_%H%M)"
 logf="logs/${action}_${logdate}.log"
 echo; echo "Log file is '$logf'"; echo
+logf="$projectroot/$logf"
 
 # PROVISION
 echo "==> Provision ${action^^} nodes"
-cd "$(dirname "$0")"
+cd "$projectroot"
 func="${action}_provision"
 $func >> $logf
 create_snapshot
 
 # CONFIGURE
 echo "==> Configure ${action^^} nodes"
-cd "$(dirname "$0")"
+cd "$projectroot"
 func="${action}_configure"
 $func >> $logf
 create_snapshot
@@ -257,7 +259,7 @@ create_snapshot
 echo
 echo "=========================================" 
 echo "= User: $user"
-echo "= Password: $pass"
+echo "= Pass: $pass"
 echo "= ---------------------------------------"
 echo "= Dashboard URL(s):"
 echo "="
